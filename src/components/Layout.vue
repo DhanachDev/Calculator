@@ -1,6 +1,7 @@
 <template>
 <div class="hello">
     // pointless comments
+    // add comment to develop branch
     <h1>{{msg}} </h1>
 </div>
 </template>
