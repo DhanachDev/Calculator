@@ -3,6 +3,7 @@
     // comment#1
     // fb#1
     // develop add comment commit
+    // fb#2
     <h1>{{msg}} </h1>
 </div>
 </template>
