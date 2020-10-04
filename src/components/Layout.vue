@@ -2,6 +2,7 @@
 <div class="hello">
     // comment#1
     // fb#1
+    // fb#2
     <h1>{{msg}} </h1>
 </div>
 </template>
