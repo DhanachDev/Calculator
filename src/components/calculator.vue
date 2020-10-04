@@ -60,8 +60,9 @@ export default {
 
 <style lang="scss" scoped>
 ._name {
-    font-size: 20px;
+    font-size: 2rem;
     text-align: left;
+    color: gray;
 }
 
 ._c-wrapper {
@@ -111,6 +112,12 @@ export default {
                 color: gray;
                 -webkit-box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
                 box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
+                outline: none;
+            }
+
+            button:active {
+                background-color: rgb(255, 166, 0);
+                color: white;
             }
 
             .equal-sign {
