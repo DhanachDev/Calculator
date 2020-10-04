@@ -2,6 +2,7 @@
 <div class="hello">
     // comment#1
     // fb#1
+    // develop add comment commit
     <h1>{{msg}} </h1>
 </div>
 </template>
