@@ -2,6 +2,8 @@
 <div class="hello">
     // pointless comments
     // add comment to develop branch after update feature
+    // add comment to develop branch
+    // add comment to test-feature-branch-2
     <h1>{{msg}} </h1>
 </div>
 </template>
