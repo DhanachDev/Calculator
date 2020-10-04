@@ -3,18 +3,15 @@
     <div class="row">
         <div class="col-12 col-lg-6">
             <div class="row">
-                <div class="_pad-box col-12 col-xl-6">
-                    <Calculator name="A"></Calculator>
-                </div>
-                <div class="_pad-box col-12 col-xl-6">
-                    <Calculator name="B"></Calculator>
+                <div class="_pad-box col-12 col-xl-6" v-for="c in calculator" :key="c.id">
+                    <Calculator :name="c.name"></Calculator>
                 </div>
             </div>
 
         </div>
 
         <div class="_pad-box col-12 col-lg-6">
-            <Result></Result>
+            <Result :options="calculator"></Result>
         </div>
     </div>
 </div>
@@ -24,7 +21,6 @@
 import Calculator from './calculator'
 import Result from './result'
 export default {
-    name: 'HelloWorld',
     components: {
         Calculator,
         Result
@@ -33,6 +29,19 @@ export default {
         msg: {
             type: String,
             default: "Vue project"
+        }
+    },
+    data() {
+        return {
+            calculator: [{
+                    id: 1,
+                    name: "A"
+                },
+                {
+                    id: 2,
+                    name: "B"
+                }
+            ],
         }
     }
 }

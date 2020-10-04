@@ -4,12 +4,25 @@
 
 <script>
 import Layout from './components/Layout.vue'
-
+import {
+    useStore
+} from 'vuex'
+import {
+    mapGetters
+} from 'vuex'
 export default {
-    name: 'App',
+    setup() {
+        const store = useStore()
+        store.commit("SET_INITIAL")
+    },
     components: {
         Layout
-    }
+    },
+    computed: {
+        ...mapGetters({
+            storeResult: 'GET_STORE_RESULT'
+        })
+    },
 }
 </script>
 

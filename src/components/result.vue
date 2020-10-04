@@ -8,8 +8,7 @@
         <div class="_filter">
             <select name="" id="">
                 <option value="all">All</option>
-                <option value="result">Result</option>
-                <option value="date">Date</option>
+                <option v-for="o in options" :key="o.id" :value="o.name">{{o.name}}</option>
             </select>
         </div>
     </div>
@@ -18,15 +17,7 @@
             Clear
         </div>
         <div class="_result-wrapper">
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
+            <ResultItem v-for="(result,index) in storeResult" :key="index" />
         </div>
 
     </div>
@@ -35,15 +26,31 @@
 
 <script>
 import ResultItem from './share/resultItem'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     components: {
         ResultItem
+    },
+    props: {
+        options: {
+            type: Array,
+            default: () => {
+                return []
+            }
+        }
+    },
+    computed: {
+        ...mapGetters({
+            storeResult: 'GET_STORE_RESULT'
+        })
     },
     data() {
         return {
             placeholder: 'Search by result, date'
         }
-    }
+    },
 }
 </script>
 
@@ -61,6 +68,10 @@ export default {
 
         ._input {
             flex: 1;
+        }
+
+        ._filter {
+            flex: .3;
         }
 
         input {
