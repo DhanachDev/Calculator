@@ -1,15 +1,31 @@
 <template>
+<Navbar />
 <Layout />
 </template>
 
 <script>
-import Layout from './components/Layout.vue'
-
+import Layout from '@/components/Layout.vue'
+import Navbar from '@/components/share/navbar.vue'
+import {
+    useStore
+} from 'vuex'
+import {
+    mapGetters
+} from 'vuex'
 export default {
-    name: 'App',
+    setup() {
+        const store = useStore()
+        store.commit("SET_INITIAL")
+    },
     components: {
-        Layout
-    }
+        Layout,
+        Navbar
+    },
+    computed: {
+        ...mapGetters({
+            storeResult: 'GET_STORE_RESULT'
+        })
+    },
 }
 </script>
 
@@ -20,7 +36,6 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
 }
 
 html {

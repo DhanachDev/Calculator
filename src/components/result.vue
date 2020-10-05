@@ -1,32 +1,29 @@
 <template>
 <div class="_result-wrapper">
     <div class="_filter-wp">
-        <div>Results</div>
+        <div class="_label">Results </div>
         <div class="_input">
-            <input type="text" :placeholder="placeholder">
+            <input type="text" :placeholder="placeholder" v-model="searchInput">
         </div>
         <div class="_filter">
-            <select name="" id="">
+            <select name="filter_cal" v-model="option">
                 <option value="all">All</option>
-                <option value="result">Result</option>
-                <option value="date">Date</option>
+                <option v-for="o in options" :key="o.id" :value="o.name">{{o.name}}</option>
             </select>
         </div>
     </div>
     <div class="_body">
-        <div class="_clear-btn">
+
+        <div class="_empty" v-if="!storeResult.length">
+            Not found any results!
+        </div>
+        <div class="_clear-btn" @click="showModal=true" v-else>
             Clear
         </div>
+        <ConfirmDialog v-if="showModal" :message="'Are you sure you want to clear the result(s)? This action cannot be undone.'" @confirm="confirmClearResult" />
+
         <div class="_result-wrapper">
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
-            <ResultItem />
+            <ResultItem v-for="(result,index) in showResult()" :key="index" :result="result" />
         </div>
 
     </div>
@@ -35,13 +32,57 @@
 
 <script>
 import ResultItem from './share/resultItem'
+import ConfirmDialog from '@/components/share/confirmDialog'
+import {
+    mapActions,
+    mapGetters
+} from 'vuex'
 export default {
     components: {
-        ResultItem
+        ResultItem,
+        ConfirmDialog
+    },
+    props: {
+        options: {
+            type: Array,
+            default: () => {
+                return []
+            }
+        }
+    },
+    computed: {
+        ...mapGetters({
+            storeResult: 'GET_STORE_RESULT'
+        })
     },
     data() {
         return {
-            placeholder: 'Search by result, date'
+            placeholder: 'Search by result, date',
+            showModal: false,
+            option: 'all',
+            searchInput: ''
+        }
+    },
+    methods: {
+        ...mapActions({
+            clearStoreResult: "clearStoreResult"
+        }),
+        confirmClearResult(answer) {
+            this.showModal = !this.showModal
+            if (answer == 'ok') {
+                this.clearStoreResult()
+            }
+        },
+        showResult() {
+            let arr = JSON.parse(JSON.stringify(this.storeResult))
+            let si = this.searchInput
+            if (this.option != 'all') {
+                arr = arr.filter(el => el.name == this.option)
+            }
+            if (si.length) {
+                arr = arr.filter(el => el.result.includes(si) || el.firstNumber.includes(si) || el.secondNumber.includes(si) || el.dateTime.includes(si) || (el.firstNumber + el.operate + el.secondNumber).includes(si))
+            }
+            return arr
         }
     }
 }
@@ -51,9 +92,14 @@ export default {
 ._result-wrapper {
     ._filter-wp {
         display: flex;
-        align-items: center;
+        // align-items: center;
+        flex-direction: column;
         font-size: 1.5rem;
         color: gray;
+
+        ._label {
+            margin-bottom: 10px;
+        }
 
         div {
             padding-right: 15px;
@@ -61,6 +107,11 @@ export default {
 
         ._input {
             flex: 1;
+            margin-bottom: 10px;
+        }
+
+        ._filter {
+            flex: .3;
         }
 
         input {
@@ -84,10 +135,16 @@ export default {
         border: 1px solid #f7f7f7;
         border-radius: 20px;
         background-color: white;
-        min-height: 350px;
+        min-height: 165px;
         padding: 35px;
         -webkit-box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
         box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
+
+        ._empty {
+            padding: 20px;
+            font-size: 2rem;
+            color: gray;
+        }
 
         ._result-wrapper {
             max-height: 600px;
@@ -113,5 +170,12 @@ export default {
         }
 
     }
+}
+
+@media (min-width: 1140px) {
+    ._filter-wp {
+        flex-direction: row !important;
+    }
+
 }
 </style>
