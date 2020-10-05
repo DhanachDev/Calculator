@@ -1,9 +1,11 @@
 <template>
+<Navbar />
 <Layout />
 </template>
 
 <script>
-import Layout from './components/Layout.vue'
+import Layout from '@/components/Layout.vue'
+import Navbar from '@/components/share/navbar.vue'
 import {
     useStore
 } from 'vuex'
@@ -16,7 +18,8 @@ export default {
         store.commit("SET_INITIAL")
     },
     components: {
-        Layout
+        Layout,
+        Navbar
     },
     computed: {
         ...mapGetters({
@@ -33,7 +36,6 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
 }
 
 html {

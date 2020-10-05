@@ -69,6 +69,7 @@ export default {
     .container-fluid {
         padding-left: 40px;
         padding-right: 40px;
+        padding-top: 60px;
     }
 
     .row {
