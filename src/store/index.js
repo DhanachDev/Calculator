@@ -5,10 +5,13 @@ import { createStore } from 'vuex'
 
 
 const state = {
-    storeResult: ['','']
+    storeResult: []
 }
 
 const actions = {
+    clearStoreResult({commit}) {
+        commit("clearStoreResult")
+    }
 }
 
 const mutations = {
@@ -17,7 +20,10 @@ const mutations = {
         if (storeResult) {
             state.storeResult = storeResult
         }
-        console.log("HEY")
+    },
+    clearStoreResult(state) {
+        state.storeResult = []
+        localStorage.removeItem("store_result");
     }
 }
 

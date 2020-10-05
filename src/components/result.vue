@@ -13,9 +13,13 @@
         </div>
     </div>
     <div class="_body">
-        <div class="_clear-btn">
+        <div class="_clear-btn" @click="showModal=true">
             Clear
         </div>
+        <div class="_empty" v-if="!storeResult.length">
+            Not found any results!
+        </div>
+        <ConfirmDialog @confirm="confirmClearResult" v-if="showModal" :message="'Are you sure you want to clear the result(s)? This action cannot be undone.'" />
         <div class="_result-wrapper">
             <ResultItem v-for="(result,index) in storeResult" :key="index" />
         </div>
@@ -26,12 +30,15 @@
 
 <script>
 import ResultItem from './share/resultItem'
+import ConfirmDialog from '@/components/share/confirmDialog'
 import {
+    mapActions,
     mapGetters
 } from 'vuex'
 export default {
     components: {
-        ResultItem
+        ResultItem,
+        ConfirmDialog
     },
     props: {
         options: {
@@ -48,9 +55,21 @@ export default {
     },
     data() {
         return {
-            placeholder: 'Search by result, date'
+            placeholder: 'Search by result, date',
+            showModal: false
         }
     },
+    methods: {
+        ...mapActions({
+            clearStoreResult: "clearStoreResult"
+        }),
+        confirmClearResult(answer) {
+            this.showModal = !this.showModal
+            if (answer == 'ok') {
+                this.clearStoreResult()
+            }
+        }
+    }
 }
 </script>
 
@@ -95,10 +114,16 @@ export default {
         border: 1px solid #f7f7f7;
         border-radius: 20px;
         background-color: white;
-        min-height: 350px;
+        min-height: 200px;
         padding: 35px;
         -webkit-box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
         box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
+
+        ._empty {
+            padding: 20px;
+            font-size: 2rem;
+            color: gray;
+        }
 
         ._result-wrapper {
             max-height: 600px;
