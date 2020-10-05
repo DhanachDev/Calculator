@@ -11,19 +11,26 @@ const state = {
 const actions = {
     clearStoreResult({commit}) {
         commit("clearStoreResult")
+    },
+    pushStoreResult({commit},obj) {
+        commit("pushStoreResult",obj)
     }
 }
 
 const mutations = {
-    SET_INITIAL:state => {
-        let storeResult = JSON.parse(localStorage.getItem("store_result"));
-        if (storeResult) {
-            state.storeResult = storeResult
+    SET_INITIAL:(state) => {
+        if (localStorage.getItem("store_result")) {
+            state.storeResult = JSON.parse(localStorage.getItem("store_result"))
+            console.log("type = ",typeof state.storeResult)
         }
     },
     clearStoreResult(state) {
         state.storeResult = []
         localStorage.removeItem("store_result");
+    },
+    pushStoreResult(state,obj) {
+        state.storeResult.push(obj)
+        localStorage.setItem("store_result", JSON.stringify(state.storeResult));
     }
 }
 

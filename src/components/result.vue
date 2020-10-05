@@ -3,25 +3,27 @@
     <div class="_filter-wp">
         <div>Results</div>
         <div class="_input">
-            <input type="text" :placeholder="placeholder">
+            <input type="text" :placeholder="placeholder" v-model="searchInput">
         </div>
         <div class="_filter">
-            <select name="" id="">
+            <select name="filter_cal" v-model="option">
                 <option value="all">All</option>
                 <option v-for="o in options" :key="o.id" :value="o.name">{{o.name}}</option>
             </select>
         </div>
     </div>
     <div class="_body">
-        <div class="_clear-btn" @click="showModal=true">
-            Clear
-        </div>
+
         <div class="_empty" v-if="!storeResult.length">
             Not found any results!
         </div>
-        <ConfirmDialog @confirm="confirmClearResult" v-if="showModal" :message="'Are you sure you want to clear the result(s)? This action cannot be undone.'" />
+        <div class="_clear-btn" @click="showModal=true" v-else>
+            Clear
+        </div>
+        <ConfirmDialog v-if="showModal" :message="'Are you sure you want to clear the result(s)? This action cannot be undone.'" @confirm="confirmClearResult" />
+
         <div class="_result-wrapper">
-            <ResultItem v-for="(result,index) in storeResult" :key="index" />
+            <ResultItem v-for="(result,index) in showResult()" :key="index" :result="result" />
         </div>
 
     </div>
@@ -56,7 +58,9 @@ export default {
     data() {
         return {
             placeholder: 'Search by result, date',
-            showModal: false
+            showModal: false,
+            option: 'all',
+            searchInput: ''
         }
     },
     methods: {
@@ -68,6 +72,18 @@ export default {
             if (answer == 'ok') {
                 this.clearStoreResult()
             }
+        },
+        showResult() {
+            let arr = JSON.parse(JSON.stringify(this.storeResult))
+            let si = this.searchInput
+            if (this.option != 'all') {
+                arr = arr.filter(el => el.name == this.option)
+            }
+            console.log("arr = ", arr)
+            if (si.length) {
+                arr = arr.filter(el => el.result.includes(si) || el.firstNumber.includes(si) || el.secondNumber.includes(si) || el.dateTime.includes(si))
+            }
+            return arr
         }
     }
 }

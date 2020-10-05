@@ -2,20 +2,28 @@
 <div class="_result-item">
     <div class="_name-wp">
         <div class="_name">
-            Calculator A
+            Calculator {{result.name}}
         </div>
         <div class="_time">
-            09/09/2020 13:30.25
+            {{result.dateTime}}
         </div>
     </div>
     <div class="_result">
-        20
+        {{result.result}}
     </div>
     <div class="_action">
-        1 <span>x</span> 20
+        {{result.firstNumber}} <span>{{result.operate}}</span> {{result.secondNumber}}
     </div>
 </div>
 </template>
+
+<script>
+export default {
+    props: {
+        result: {}
+    },
+}
+</script>
 
 <style lang="scss" scoped>
 ._result-item {
