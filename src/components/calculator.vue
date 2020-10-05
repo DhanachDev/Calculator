@@ -14,10 +14,10 @@
                 </div>
             </div>
             <div class="_cal-body">
-                <button type="button" class="plus-sign" value="+" @click="operate = '+'">+</button>
-                <button type="button" value="c" @click="setDefault()">c</button>
-                <button type="button" value="x" @click="operate = 'x'">x</button>
-                <button type="button" value="-" @click="operate = '-'">-</button>
+                <button type="button" class="plus-sign operate" value="+" @click="operate = firstNumber.length ? '+' : ''">+</button>
+                <button type="button" value="c" class="clear-value" @click="setDefault()">c</button>
+                <button type="button" value="x" class="operate" @click="operate = firstNumber.length ? 'x' : ''">x</button>
+                <button type="button" value="-" class="operate" @click="operate = firstNumber.length ? '-' : ''">-</button>
 
                 <button type="button" value="7" @click="clicked('7')">7</button>
                 <button type="button" value="8" @click="clicked('8')">8</button>
@@ -45,6 +45,7 @@
 import {
     mapActions
 } from 'vuex'
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -62,7 +63,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            pushStoreResult: "pushStoreResult"
+            pushStoreResult: "pushStoreResult",
+            calculate: "calculate"
         }),
         setDefault() {
             this.operate = this.firstNumber = this.secondNumber = ''
@@ -70,22 +72,56 @@ export default {
         },
         clicked(number) {
             if (this.operate == '') {
-                this.firstNumber += number
+                this.firstNumber += (number == '.' ? (this.firstNumber.length ? number : '0.') : number)
             } else {
-                this.secondNumber += number
+                this.secondNumber += (number == '.' ? (this.secondNumber.length ? number : '0.') : number)
             }
         },
-        getResult() {
-            let current_datetime = new Date()
-            let dateTime = ("0" + current_datetime.getDate()).slice(-2) + "/" + ("0" + (current_datetime.getMonth() + 1)).slice(-2) + "/" + current_datetime.getFullYear() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + "." + current_datetime.getSeconds()
-            this.pushStoreResult({
-                name: 'A',
-                result: "30",
-                operate: this.operate,
-                firstNumber: this.firstNumber,
-                secondNumber: this.secondNumber,
-                dateTime: dateTime
-            })
+        async getResult() {
+            if (this.firstNumber.length && this.secondNumber.length) {
+                let expr = this.getExpr(Number(this.firstNumber), Number(this.secondNumber), this.operate)
+                axios.get('https://api.mathjs.org/v4/?expr=' + expr).then(res => {
+                    this.result = "" + res.data
+                    let current_datetime = new Date()
+                    let dateTime = ("0" + current_datetime.getDate()).slice(-2) + "/" + ("0" + (current_datetime.getMonth() + 1)).slice(-2) + "/" + current_datetime.getFullYear() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + "." + current_datetime.getSeconds()
+                    this.pushStoreResult({
+                        name: this.name,
+                        result: this.result,
+                        operate: this.operate,
+                        firstNumber: this.firstNumber,
+                        secondNumber: this.secondNumber,
+                        dateTime: dateTime
+                    })
+                })
+
+            }
+
+        },
+        getExpr(fn, sn, op) {
+            let txt = "";
+            switch (op) {
+                case '+': {
+                    txt = fn + '%2B' + sn
+                    break;
+                }
+                case '-': {
+                    txt = fn + '-' + sn;
+                    break;
+                }
+                case 'x': {
+                    txt = fn + '*' + sn;
+                    break;
+                }
+                case '/': {
+                    txt = fn + '/' + sn;
+                    break;
+                }
+                default: {
+                    txt = fn + '+' + sn;
+                    break;
+                }
+            }
+            return txt
         }
     }
 }
@@ -126,6 +162,7 @@ export default {
                 color: gray;
                 font-size: 2rem;
                 word-break: break-all;
+                min-height: 60px;
 
                 span {
                     color: #e72dd1;

@@ -32,6 +32,7 @@ export default {
     ._name-wp {
         display: flex;
         font-size: 2rem;
+        flex-direction: column;
 
         ._name {
             text-align: left;
@@ -39,9 +40,10 @@ export default {
         }
 
         ._time {
-            text-align: right;
+            text-align: left;
             color: #a7d4fa;
             flex: 1;
+            font-size: 22px;
         }
 
     }
@@ -61,6 +63,20 @@ export default {
 
         span {
             color: #e72dd1;
+        }
+    }
+}
+
+@media (min-width: 1140px) {
+    ._filter-wp {
+        flex-direction: row !important;
+    }
+
+    ._name-wp {
+        flex-direction: row !important;
+
+        ._time {
+            text-align: right !important;
         }
     }
 }

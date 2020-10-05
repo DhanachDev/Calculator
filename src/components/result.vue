@@ -1,7 +1,7 @@
 <template>
 <div class="_result-wrapper">
     <div class="_filter-wp">
-        <div>Results</div>
+        <div class="_label">Results </div>
         <div class="_input">
             <input type="text" :placeholder="placeholder" v-model="searchInput">
         </div>
@@ -79,9 +79,8 @@ export default {
             if (this.option != 'all') {
                 arr = arr.filter(el => el.name == this.option)
             }
-            console.log("arr = ", arr)
             if (si.length) {
-                arr = arr.filter(el => el.result.includes(si) || el.firstNumber.includes(si) || el.secondNumber.includes(si) || el.dateTime.includes(si))
+                arr = arr.filter(el => el.result.includes(si) || el.firstNumber.includes(si) || el.secondNumber.includes(si) || el.dateTime.includes(si) || (el.firstNumber + el.operate + el.secondNumber).includes(si))
             }
             return arr
         }
@@ -93,9 +92,14 @@ export default {
 ._result-wrapper {
     ._filter-wp {
         display: flex;
-        align-items: center;
+        // align-items: center;
+        flex-direction: column;
         font-size: 1.5rem;
         color: gray;
+
+        ._label {
+            margin-bottom: 10px;
+        }
 
         div {
             padding-right: 15px;
@@ -103,6 +107,7 @@ export default {
 
         ._input {
             flex: 1;
+            margin-bottom: 10px;
         }
 
         ._filter {
@@ -130,7 +135,7 @@ export default {
         border: 1px solid #f7f7f7;
         border-radius: 20px;
         background-color: white;
-        min-height: 200px;
+        min-height: 165px;
         padding: 35px;
         -webkit-box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
         box-shadow: -1px 1px 20px -14px rgba(0, 0, 0, 0.44);
@@ -165,5 +170,12 @@ export default {
         }
 
     }
+}
+
+@media (min-width: 1140px) {
+    ._filter-wp {
+        flex-direction: row !important;
+    }
+
 }
 </style>

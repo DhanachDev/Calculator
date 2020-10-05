@@ -49,9 +49,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
-<style scoped>
+<style lang="scss" scoped>
 .column {
     padding: 20px;
+}
+
+.row {
+    ._pad-box {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
 }
 
 @media (min-width: 1140px) {
@@ -62,6 +69,13 @@ export default {
     .container-fluid {
         padding-left: 40px;
         padding-right: 40px;
+    }
+
+    .row {
+        ._pad-box {
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
     }
 }
 </style>
